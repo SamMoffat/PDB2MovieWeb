@@ -10,10 +10,10 @@
 
   if(is_string($conn_ssh->res)) {
 
-    exit(sprintf('{"status": "failure", "title":"Offline", "text": "%s"}', json_decode($conn_ssh->res)->text ));
+    exit(sprintf('{"status": "failure", "title":"Offline", "text": "%s", "mode", "%s"}', json_decode($conn_ssh->res)->text , $configs['rendererMode']));
   }
   else {
-    exit('{"status": "success", "title":"Online", "text": "Connected to Processing server securely."}');
+    exit('{"status": "success", "title":"Online", "text": "Connected to Processing server securely.", "mode":"pymol" }');
   }
 
 ?>

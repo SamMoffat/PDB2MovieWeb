@@ -14,6 +14,7 @@
 	include "FileChecker.php";
 	include "PdbChecker.php";
 	include "PythonChecker.php";
+	include "TclChecker.php";
 	include "RemoteConnection.php";
 
 	if (!$_POST["tos"] === true) {
@@ -24,7 +25,8 @@
 	$sha1Args = sha1(var_export($_POST, True) . $pyFileUsed);
 	$sha1File = sha1_file($_FILES['pdbFile']['tmp_name']);
 	$sha1Final = sha1($sha1Args . $sha1File);
-
+	$rendererMode="1";
+	
 	//authenticate .pdb file
  	$pdbFile = new PdbChecker($sha1Final);
 	if ($pdbFile->didItPass() !== "Success"){
@@ -38,7 +40,13 @@
 	$pyToPass = 0;
 	if ($pyFileUsed) {
 		$pyToPass = 1;
-  	$pyFile = new PythonChecker($sha1Final);
+  		if ($configs['mode'] == "pymol") {
+			$pyFile = new PythonChecker($sha1File);
+		} else {
+  			$pyFile = new TclChecker($sha1File);
+  			$rendererMode="0";
+		}
+		$pyFile = new PythonChecker($sha1Final);
   	if ($pyFile->didItPass() !== "Success"){
       endOp(jsonFormat("Failure", "Something has gone wrong", ".py file: " . $pyFile->didItPass()));
 		} else {
@@ -194,7 +202,7 @@
 
 	//all values at this point should be sanitized, format command for the processing server
 
-	$qsub_cmd = sprintf('TOCLEAN="%s"; CLEAN=${TOCLEAN//[^a-zA-Z0-9 ,.!_]/};CLEAN=`echo -n $CLEAN | tr A-Z a-z`; cd %s && qsub -N %s -v LOC="%s",RETDIR="%s",NAME="%s",RES="%s",ISUNIX="%s",WATERS="%s",COMBI="%s",MULTIPLE="%s",THREED="%s",FILEKEEP="%s",CONFS="%s",FREQ="%s",STEP="%s",DSTEP="%s",EMAIL="%s",MOLLIST="%s",MODLIST="%s",CUTLIST="%s",CODE="%s",LOCALHOST="%s",ORIGNAME="%s",TIME="%s",COMMENT="$CLEAN",PYNAME="%s" -q %s %s/submit.pbs',
+	$qsub_cmd = sprintf('TOCLEAN="%s"; CLEAN=${TOCLEAN//[^a-zA-Z0-9 ,.!_]/};CLEAN=`echo -n $CLEAN | tr A-Z a-z`; cd %s && qsub -N %s -v LOC="%s",RETDIR="%s",NAME="%s",RES="%s",ISUNIX="%s",WATERS="%s",COMBI="%s",MULTIPLE="%s",THREED="%s",FILEKEEP="%s",CONFS="%s",FREQ="%s",STEP="%s",DSTEP="%s",EMAIL="%s",MOLLIST="%s",MODLIST="%s",CUTLIST="%s",CODE="%s",RENDERERMODE="%s",LOCALHOST="%s",ORIGNAME="%s",TIME="%s",COMMENT="$CLEAN",PYNAME="%s" -q %s %s/submit.pbs',
 	$comment,
 	$remoteScripts,
 	$name,
@@ -217,6 +225,7 @@
 	$modList,
 	$cutList,
 	$sCode,
+	$rendererMode,
 	$thisServer,
 	$origName,
 	date('d M y h:m:s A'),

@@ -66,10 +66,8 @@
         </div>
 
         <h4>PDB file</h4>
-
         <li>Select and upload a protein data bank (PDB) file (.pdb format only). The file will be discarded after completion of your submission request.</li>
         <input type="file" name="pdbFile" id="pdbFile" accept=".pdb" style="display: block;"></input>
-
         <hr>
 
         <h4>Simulation parameter</h4>
@@ -160,7 +158,12 @@
 
         <h4>Output preferences</h4>
 
-        <div class="form-group">
+        <div class="form-group" id="pythonModeUpload">
+          <li><div id="pyFileText">Upload (optional) PYMol video formatting statements (.py file)</div>
+            <input type="file" name="pyFile" id="pyFile" accept=".py" style="display: block"></li>
+        </div>
+
+        <div class="form-group" id="tclModeUpload">
           <li><div id="pyFileText">Upload (optional) PYMol video formatting statements (.py file)</div>
             <input type="file" name="pyFile" id="pyFile" accept=".py" style="display: block"></li>
         </div>

@@ -11,7 +11,7 @@ oldFileName=${ORIGNAME}
 code=${CODE}
 time=${TIME}
 pyName=${PYNAME}
-pyTrue="0"
+pyTrue=${RENDERERMODE}
 res=${RES}
 isUnix=${ISUNIX}
 waters=${WATERS}
@@ -74,9 +74,13 @@ fi
 if [ -n "$pyName" ]; then
 	sPyName="--video $TMP/$pyName "
 fi
+if [$pyTrue -eq "0"]; then
+    sPyTrue="--vmd"
+else sPyTrue=""
+fi
 
 com="python3 $EXECSRC/pdb2movie.py $TMP/$name --res $res $sWaters $sCombi $sMulti $sConfs $sThreed $sCombi $sFreq $sStep $sDStep $sModList $sMolList $sCutList $sPyName"
-args="$oldFileName $pyTrue '$res' $waters $combi $multiple $threed $confs $freq $step $dstep '$molList' '$modList' '$cutList' '$time' $code '$comment'"
+args="$oldFileName $sPyTrue '$res' $waters $combi $multiple $threed $confs $freq $step $dstep '$molList' '$modList' '$cutList' '$time' $code '$comment'"
 
 echo "NAME="$name
 echo "RES="$res

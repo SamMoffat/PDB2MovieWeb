@@ -9,7 +9,15 @@ $.ajax({
     $("#processing-status").empty();
     $("#processing-status").css("color", colour);
     $("#processing-status").append(res.title)
-  },
+
+      if (res.mode == "vmd") {
+        $('#tclModeUpload').css('visibility', 'visible')
+      } else {
+        $('#pythonModeUpload').css('visibility', 'visible')
+      }
+  }
+
+  ,
   failure: function (data){
     console.log("FAI");
     res = JSON.parse(data);

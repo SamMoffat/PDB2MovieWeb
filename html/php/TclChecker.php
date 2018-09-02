@@ -32,7 +32,7 @@
 
         foreach ($split as $str) {
 
-          acc++;
+          $acc++;
 
           if (substr($str, 0, 1) === "#" || $str == "") {
             continue 1;

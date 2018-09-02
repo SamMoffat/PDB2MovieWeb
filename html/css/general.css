@@ -99,6 +99,13 @@ button[type="button"]:click {
 
 }
 
+#pythonModFile {
+	visibility: hidden;
+}
+
+#tclModeFile {
+	visibility: hidden;
+}
 
 #width, #height {
 	 -moz-appearance:textfield;
